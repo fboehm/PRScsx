@@ -103,7 +103,7 @@ def mcmc(a, b, phi, snp_dict, beta_mrg, frq_dict, idx_dict, n, ld_blk, blk_size,
         for jj in range(p_tot):
             while True:
                 try:
-                    psi[jj] = gigrnd.gigrnd(a-0.5*n_grp[jj], 2.0*delta[jj], xx[jj])
+                    psi[jj] = gigrnd.gigrnd(float(a-0.5*n_grp[jj,0]), float(2.0*delta[jj,0]), float(xx[jj,0]))
                 except:
                     continue
                 else:
@@ -169,7 +169,7 @@ def mcmc(a, b, phi, snp_dict, beta_mrg, frq_dict, idx_dict, n, ld_blk, blk_size,
 
         with open(eff_file, 'w') as ff:
             for snp, bp, a1, a2, beta in zip(snp_pp, bp_pp, a1_pp, a2_pp, beta_est[pp]):
-                ff.write('%d\t%s\t%d\t%s\t%s\t%.6e\n' % (chrom, snp, bp, a1, a2, beta))
+                ff.write('%d\t%s\t%d\t%s\t%s\t%.6e\n' % (chrom, snp, bp, a1, a2, beta.item()))
 
     if meta == 'TRUE':
         if phi_updt == True:
@@ -183,12 +183,12 @@ def mcmc(a, b, phi, snp_dict, beta_mrg, frq_dict, idx_dict, n, ld_blk, blk_size,
                     ff.write(('%d\t%s\t%d\t%s\t%s' + '\t%.6e'*n_pst + '\n') % (chrom, snp, bp, a1, a2, *beta))
             else:
                 for snp, bp, a1, a2, beta in zip(snp_dict['SNP'], snp_dict['BP'], snp_dict['A1'], snp_dict['A2'], mu):
-                    ff.write('%d\t%s\t%d\t%s\t%s\t%.6e\n' % (chrom, snp, bp, a1, a2, beta))
+                    ff.write('%d\t%s\t%d\t%s\t%s\t%.6e\n' % (chrom, snp, bp, a1, a2, beta.item()))
 
 
     # print estimated phi
     if phi_updt == True:
-        print('... Estimated global shrinkage parameter: %1.2e ...' % phi_est )
+        print('... Estimated global shrinkage parameter: %1.2e ...' % np.float64(phi_est).item())
 
     print('... Done ...')
 
